@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>PDF Buddy Electron</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/4.10.38/pdf.min.mjs" type="module"></script>
+</head>
+<body>
+    <div id="error-log" style="color: red; background: black; z-index: 9999; position: absolute; max-height: 200px; overflow: auto;"></div>
+    <script>
+        window.addEventListener('error', function(event) {
+            document.getElementById('error-log').innerHTML += event.message + '<br>';
+        });
+        window.addEventListener('unhandledrejection', function(event) {
+            document.getElementById('error-log').innerHTML += 'Unhandled Promise: ' + event.reason + '<br>';
+        });
+    </script>
+    <div id="toolbar">
+        <div class="toolbar-left">
+            <svg class="app-logo" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M4 19V5C4 3.89543 4.89543 3 6 3H19.4C19.7314 3 20 3.26863 20 3.6V16.7143C20 17.9766 18.9766 19 17.7143 19H4ZM4 19C4 20.1046 4.89543 21 6 21H20" stroke="#ffd54f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M8 7H16" stroke="#ffd54f" stroke-width="2" stroke-linecap="round"/>
+                <path d="M8 11H16" stroke="#ffd54f" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <label for="file-input" class="custom-file-upload">
+                Apri PDF
+            </label>
+            <input type="file" id="file-input" accept="application/pdf">
+            <div id="file-info">
+                <span id="file-label">File:</span>
+                <span id="file-name">Nessun file selezionato</span>
+            </div>
+        </div>
+        <div class="toolbar-right">
+            <button id="about-btn" class="icon-btn" aria-label="Informazioni">?</button>
+        </div>
+    </div>
+
+    <div id="main-content">
+        <div id="sidebar-history">
+            <h3>Coda Traduzioni</h3>
+            <div id="history-list">
+                <!-- Translated words will appear here -->
+            </div>
+            <div class="sidebar-footer">
+                <button id="play-flashcard-btn" class="flashcard-btn" disabled>
+                    Gioca a Flashcard (0/10)
+                </button>
+            </div>
+        </div>
+        
+        <div id="pdf-container">
+            <div id="viewer" class="pdfViewer"></div>
+        </div>
+    </div>
+
+    <div id="translation-popup" class="hidden">
+        <div class="popup-header">
+            <span id="original-text">Word</span>
+            <button id="speak-btn">🔊</button>
+        </div>
+        <div id="translated-text">Traduzione</div>
+        <div class="popup-footer">
+            <button id="close-btn">Chiudi</button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="about-modal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h2 style="color:#ffd54f; margin-top:0;">PDF Buddy Electron</h2>
+            <p><strong>Autore:</strong> Viger1973</p>
+            <p><strong>Versione:</strong> 1.0</p>
+            <p><strong>Email:</strong> m.colombo1973@gmail.com</p>
+            <p style="margin-top:20px; font-size:14px; opacity:0.8;">Un'app per leggere e tradurre istantaneamente i tuoi PDF.</p>
+            <button class="close-modal-btn" id="close-about-btn">Chiudi</button>
+        </div>
+    </div>
+
+    <div id="flashcard-modal" class="modal-overlay hidden">
+        <div class="modal-content game-modal">
+            <div class="game-header">
+                <h2 style="color:#ffd54f; margin:0;">Flashcard Time!</h2>
+                <div id="game-score">Punti: <span id="score-val">0</span></div>
+            </div>
+            <div class="flashcard-container">
+                <div class="flashcard-front" id="flashcard-front">
+                    <span id="game-word" class="game-word-text">Word</span>
+                    <button id="game-speak-btn" class="history-speak-btn" style="margin: 15px auto;">🔊</button>
+                </div>
+            </div>
+            <h3 style="text-align:center; font-weight: normal; margin-bottom: 20px;">Seleziona la traduzione corretta:</h3>
+            <div class="options-grid" id="game-options">
+                <!-- Options injected by JS -->
+            </div>
+            <div id="game-feedback" class="game-feedback hidden">Corretto!</div>
+            <div class="modal-footer" style="margin-top: 25px;">
+                <button class="close-modal-btn" id="next-word-btn" style="background:#5cb85c; color:white; display:none;">Prossima Parola ➔</button>
+                <button class="close-modal-btn" id="close-game-btn">Esci dal gioco</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="renderer.js" type="module"></script>
+</body>
+</html>

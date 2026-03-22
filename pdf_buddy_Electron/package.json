@@ -1,0 +1,25 @@
+{
+  "name": "pdf_buddy_electron",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --mac",
+    "dist": "electron-builder"
+  },
+  "build": {
+    "appId": "com.viger1973.pdfbuddy",
+    "productName": "PDF Buddy Electron",
+    "npmRebuild": false,
+    "mac": {
+      "target": ["dmg", "zip"]
+    }
+  },
+  "dependencies": {
+    "pdfjs-dist": "^4.10.38"
+  },
+  "devDependencies": {
+    "electron": "^34.3.0",
+    "electron-builder": "^25.1.8"
+  }
+}
